@@ -1,0 +1,40 @@
+{% extends "base.html" %}
+{% block title %}{{ product.name }} | Parts360{% endblock %}
+{% block content %}
+<section class="product-detail">
+    <div class="gallery">
+        <div class="main-image"><img id="mainProductImage" src="{{ url_for('static', filename=product.gallery[0]) }}" alt="{{ product.name }}"></div>
+        <div class="thumb-row">
+            {% for image in product.gallery %}
+            <button type="button" class="thumb" data-image="{{ url_for('static', filename=image) }}"><img src="{{ url_for('static', filename=image) }}" alt="{{ product.name }} view {{ loop.index }}"></button>
+            {% endfor %}
+        </div>
+    </div>
+    <div class="detail-copy">
+        <p class="eyebrow">{{ product.category }} | {{ product.maker }}</p>
+        <h1>{{ product.name }}</h1>
+        <p class="rating">{{ product.rating }} stars from {{ product.reviews }} verified reviews</p>
+        <div class="detail-price"><strong>Rs. {{ product.discount_price }}</strong><del>Rs. {{ product.price }}</del><span>{{ ((1 - product.discount_price / product.price) * 100)|round|int }}% off</span></div>
+        <div class="fitment-box">
+            <strong>Compatibility confirmed</strong>
+            <span>{{ product.brand }} {{ product.model }} {{ product.year }}</span>
+        </div>
+        <p>{{ product.description }}</p>
+        <ul class="spec-list">{% for spec in product.specs %}<li>{{ spec }}</li>{% endfor %}</ul>
+        <div class="delivery-box">
+            <span>In stock: {{ product.stock }} units</span>
+            <span>Estimated delivery in {{ product.delivery_days }} days</span>
+            <span>Warranty: {{ product.warranty }}</span>
+        </div>
+        <form class="buy-box" action="/add_to_cart/{{ product.id }}" method="POST">
+            <label>Quantity<input type="number" name="qty" min="1" max="{{ product.stock }}" value="1"></label>
+            <button type="submit">Add to Cart</button>
+            <input type="hidden" name="next" value="/cart">
+        </form>
+    </div>
+</section>
+<section class="section muted">
+    <div class="section-heading"><p class="eyebrow">Same vehicle</p><h2>Related Parts</h2></div>
+    <div class="product-grid">{% for part in related %}{% include "product_card.html" %}{% endfor %}</div>
+</section>
+{% endblock %}

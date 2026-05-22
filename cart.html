@@ -1,0 +1,42 @@
+﻿{% extends "base.html" %}
+{% block title %}Cart | Parts360{% endblock %}
+{% block content %}
+<section class="page-head compact"><p class="eyebrow">Shopping cart</p><h1>Your Cart</h1></section>
+<section class="cart-layout">
+    <div class="cart-items">
+        {% if cart["items"] %}
+            {% for row in cart["items"] %}
+            <article class="cart-card">
+                <img src="{{ url_for('static', filename=row.product.image) }}" alt="{{ row.product.name }}">
+                <div>
+                    <h2>{{ row.product.short_name }}</h2>
+                    <p>{{ row.product.brand }} {{ row.product.model }} {{ row.product.year }} | {{ row.product.maker }}</p>
+                    <strong>Rs. {{ row.product.discount_price }}</strong>
+                </div>
+                <div class="qty-controls">
+                    <form action="/update_cart" method="POST"><input type="hidden" name="product_id" value="{{ row.product.id }}"><input type="hidden" name="action" value="decrease"><button>-</button></form>
+                    <span>{{ row.qty }}</span>
+                    <form action="/update_cart" method="POST"><input type="hidden" name="product_id" value="{{ row.product.id }}"><input type="hidden" name="action" value="increase"><button>+</button></form>
+                </div>
+                <strong>Rs. {{ row.line_total }}</strong>
+                <form action="/update_cart" method="POST"><input type="hidden" name="product_id" value="{{ row.product.id }}"><input type="hidden" name="action" value="remove"><button class="link-button">Remove</button></form>
+            </article>
+            {% endfor %}
+        {% else %}
+            <div class="empty-state"><h2>Your cart is empty</h2><p>Add compatible parts to continue checkout.</p><a class="button" href="/vehicle">Shop Parts</a></div>
+        {% endif %}
+    </div>
+    <aside class="summary-card">
+        <h2>Order Summary</h2>
+        <form action="/apply_coupon" method="POST" class="coupon-form"><input name="coupon" value="{{ cart.coupon }}" placeholder="Try PARTS10"><button>Apply</button></form>
+        <div><span>Subtotal</span><strong>Rs. {{ cart.subtotal }}</strong></div>
+        <div><span>Discount</span><strong>-Rs. {{ cart.discount }}</strong></div>
+        <div><span>Shipping</span><strong>{% if cart.shipping == 0 %}Free{% else %}Rs. {{ cart.shipping }}{% endif %}</strong></div>
+        <div><span>GST 18%</span><strong>Rs. {{ cart.tax }}</strong></div>
+        <div class="summary-total"><span>Total</span><strong>Rs. {{ cart.total }}</strong></div>
+        <a class="button full" href="/checkout">Proceed to Checkout</a>
+        <a class="continue" href="/vehicle">Continue Shopping</a>
+    </aside>
+</section>
+{% endblock %}
+

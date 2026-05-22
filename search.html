@@ -1,0 +1,21 @@
+{% extends "base.html" %}
+{% block title %}Search | Parts360{% endblock %}
+{% block content %}
+<section class="page-head compact">
+    <p class="eyebrow">Search results</p>
+    <h1>{{ parts|length }} results for "{{ query }}"</h1>
+    <form class="wide-search" action="/search" method="GET">
+        <input name="query" value="{{ query }}" placeholder="Search part name, category or maker">
+        <button type="submit">Search</button>
+    </form>
+</section>
+<section class="section">
+    <div class="product-grid">
+        {% if parts %}
+            {% for part in parts %}{% include "product_card.html" %}{% endfor %}
+        {% else %}
+            <div class="empty-state"><h2>No matching parts</h2><p>Try searching brake pads, air filter, battery, headlamp or bumper.</p></div>
+        {% endif %}
+    </div>
+</section>
+{% endblock %}

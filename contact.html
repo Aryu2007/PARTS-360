@@ -1,0 +1,14 @@
+{% extends "base.html" %}
+{% block title %}Contact | Parts360{% endblock %}
+{% block content %}
+<section class="page-head compact"><p class="eyebrow">Support</p><h1>Parts Advisor Help</h1><p>Ask for compatibility, warranty or bulk garage orders.</p></section>
+<section class="auth-wrap">
+    <form class="auth-card" method="POST">
+        {% if message %}<p class="success">{{ message }}</p>{% endif %}
+        <label>Name<input name="name" required></label>
+        <label>Email<input name="email" type="email" required></label>
+        <label>Message<textarea name="message" required></textarea></label>
+        <button type="submit">Send Message</button>
+    </form>
+</section>
+{% endblock %}

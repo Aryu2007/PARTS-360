@@ -1,0 +1,68 @@
+{% extends "base.html" %}
+{% block title %}Parts360 | Car Spare Parts{% endblock %}
+{% block content %}
+<section class="hero">
+    <div class="hero-copy">
+        <p class="eyebrow">India-wide spare parts marketplace</p>
+        <h1>Find the correct part for your exact car.</h1>
+        <p>Select brand, model and year to see compatible engine, brake, suspension, lighting, body and accessory parts with realistic pricing and delivery.</p>
+        <a class="button large" href="#vehicle-search">Find Parts</a>
+    </div>
+</section>
+
+<section id="vehicle-search" class="selector-band">
+    <div class="section-heading">
+        <p class="eyebrow">Vehicle fitment</p>
+        <h2>Select Your Vehicle</h2>
+    </div>
+    <form class="vehicle-form" action="/vehicle" method="GET">
+        <select name="brand" id="brand" required data-model-target="model">
+            <option value="">Select Brand</option>
+            {% for brand in vehicles %}<option value="{{ brand }}">{{ brand }}</option>{% endfor %}
+        </select>
+        <select name="model" id="model" required><option value="">Select Model</option></select>
+        <select name="year" required>
+            <option value="">Select Year</option>
+            {% for year in years %}<option value="{{ year }}">{{ year }}</option>{% endfor %}
+        </select>
+        <button type="submit">Find Compatible Parts</button>
+    </form>
+</section>
+
+<section class="section">
+    <div class="section-heading">
+        <p class="eyebrow">Shop by category</p>
+        <h2>Popular Part Categories</h2>
+    </div>
+    <div class="category-grid">
+        {% for category in categories %}
+        {% set filename = 'bodyparts.png' if category == 'Body Parts' else category|lower ~ '.png' %}
+        <a class="category-card" href="/vehicle?category={{ category }}">
+            <img src="{{ url_for('static', filename=filename) }}" alt="{{ category }}">
+            <h3>{{ category }}</h3>
+            <p>OEM-style and trusted aftermarket options.</p>
+        </a>
+        {% endfor %}
+    </div>
+</section>
+
+<section class="section muted">
+    <div class="section-heading">
+        <p class="eyebrow">Featured stock</p>
+        <h2>Ready to Ship Parts</h2>
+    </div>
+    <div class="product-grid">
+        {% for part in featured_parts %}
+            {% include "product_card.html" %}
+        {% endfor %}
+    </div>
+</section>
+
+<section class="trust-strip">
+    <div><strong>2-6 day delivery</strong><span>Across major Indian cities</span></div>
+    <div><strong>Fitment checked</strong><span>Brand, model and year matching</span></div>
+    <div><strong>Easy returns</strong><span>7-day unused product return</span></div>
+    <div><strong>Secure checkout</strong><span>COD, UPI, card and net banking UI</span></div>
+</section>
+<script id="parts360-models" type="application/json">{{ vehicles|tojson }}</script>
+{% endblock %}

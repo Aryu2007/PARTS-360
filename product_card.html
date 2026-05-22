@@ -1,0 +1,19 @@
+<article class="product-card">
+    <a href="/product/{{ part.id }}" class="product-media">
+        <img src="{{ url_for('static', filename=part.image) }}" alt="{{ part.name }}">
+        <span>{{ part.category }}</span>
+    </a>
+    <div class="product-info">
+        <p class="compat">{{ part.brand }} {{ part.model }} | {{ part.year }}</p>
+        <h3><a href="/product/{{ part.id }}">{{ part.short_name }}</a></h3>
+        <p class="maker">{{ part.maker }} | {{ part.rating }} stars ({{ part.reviews }})</p>
+        <div class="price-row">
+            <strong>Rs. {{ part.discount_price }}</strong>
+            <del>Rs. {{ part.price }}</del>
+        </div>
+        <form action="/add_to_cart/{{ part.id }}" method="POST">
+            <input type="hidden" name="next" value="{{ request.full_path }}">
+            <button type="submit">Add to Cart</button>
+        </form>
+    </div>
+</article>

@@ -1,0 +1,31 @@
+{% extends "base.html" %}
+{% block title %}Compatible Parts | Parts360{% endblock %}
+{% block content %}
+<section class="page-head compact">
+    <p class="eyebrow">Compatible catalog</p>
+    <h1>{% if brand and model and year %}{{ brand }} {{ model }} {{ year }} Parts{% else %}All Spare Parts{% endif %}</h1>
+    <p>{{ parts|length }} products found. Use filters to narrow the catalog.</p>
+</section>
+<section class="listing-layout">
+    <aside class="filters-panel">
+        <h2>Filter Parts</h2>
+        <form action="/vehicle" method="GET" class="filter-form">
+            <label>Brand<select name="brand" id="brand" data-model-target="model"><option value="">All Brands</option>{% for b in vehicles %}<option value="{{ b }}" {% if b == brand %}selected{% endif %}>{{ b }}</option>{% endfor %}</select></label>
+            <label>Model<select name="model" id="model" data-current-model="{{ model }}"><option value="">All Models</option></select></label>
+            <label>Year<select name="year"><option value="">All Years</option>{% for y in years %}<option value="{{ y }}" {% if y|string == year|string %}selected{% endif %}>{{ y }}</option>{% endfor %}</select></label>
+            <label>Category<select name="category"><option value="">All Categories</option>{% for c in categories %}<option value="{{ c }}" {% if c == category %}selected{% endif %}>{{ c }}</option>{% endfor %}</select></label>
+            <label>Search<input name="query" value="{{ query }}" placeholder="pads, filter, Bosch"></label>
+            <label>Sort<select name="sort"><option value="">Recommended</option><option value="price-low" {% if sort == 'price-low' %}selected{% endif %}>Price low to high</option><option value="price-high" {% if sort == 'price-high' %}selected{% endif %}>Price high to low</option><option value="rating" {% if sort == 'rating' %}selected{% endif %}>Top rated</option></select></label>
+            <button type="submit">Apply Filters</button>
+        </form>
+    </aside>
+    <div class="product-grid listing">
+        {% if parts %}
+            {% for part in parts %}{% include "product_card.html" %}{% endfor %}
+        {% else %}
+            <div class="empty-state"><h2>No parts found</h2><p>Try changing the model, year, category or search keyword.</p><a class="button" href="/vehicle">View all parts</a></div>
+        {% endif %}
+    </div>
+</section>
+<script id="parts360-models" type="application/json">{{ vehicles|tojson }}</script>
+{% endblock %}

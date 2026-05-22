@@ -1,0 +1,28 @@
+﻿{% extends "base.html" %}
+{% block title %}Checkout | Parts360{% endblock %}
+{% block content %}
+<section class="page-head compact"><p class="eyebrow">Secure checkout</p><h1>Delivery & Payment</h1></section>
+<section class="checkout-layout">
+    <form class="checkout-form" action="/checkout" method="POST">
+        <h2>Customer Details</h2>
+        <label>Full Name<input name="customer_name" required placeholder="Customer name"></label>
+        <label>Phone Number<input name="phone" required placeholder="10-digit mobile number"></label>
+        <label>Email<input name="email" type="email" required placeholder="email@example.com"></label>
+        <label>Delivery Address<textarea name="address" required placeholder="House, street, city, state, PIN code"></textarea></label>
+        <h2>Payment Method</h2>
+        <div class="payment-options">
+            <label><input type="radio" name="payment_method" value="Cash on Delivery" checked> Cash on Delivery</label>
+            <label><input type="radio" name="payment_method" value="UPI"> UPI</label>
+            <label><input type="radio" name="payment_method" value="Credit/Debit Card"> Credit/Debit Card</label>
+            <label><input type="radio" name="payment_method" value="Net Banking"> Net Banking</label>
+        </div>
+        <button type="submit">Place Order</button>
+    </form>
+    <aside class="summary-card">
+        <h2>Order Summary</h2>
+        {% for row in cart["items"] %}<div><span>{{ row.product.short_name }} x {{ row.qty }}</span><strong>Rs. {{ row.line_total }}</strong></div>{% endfor %}
+        <div class="summary-total"><span>Total</span><strong>Rs. {{ cart.total }}</strong></div>
+    </aside>
+</section>
+{% endblock %}
+

@@ -1,0 +1,23 @@
+﻿{% extends "base.html" %}
+{% block title %}Order Confirmed | Parts360{% endblock %}
+{% block content %}
+<section class="confirmation">
+    <p class="eyebrow">Order placed</p>
+    <h1>Thank you for shopping with Parts360.</h1>
+    <div class="confirm-card">
+        <h2>Order ID: {{ order.order_id }}</h2>
+        <p><strong>Estimated Delivery:</strong> {{ order.delivery_date }}</p>
+        {% if order.customer_name %}<p><strong>Deliver to:</strong> {{ order.customer_name }}, {{ order.address }}</p>{% endif %}
+        {% if order.payment_method %}<p><strong>Payment:</strong> {{ order.payment_method }}</p>{% endif %}
+    </div>
+    {% if order.cart %}
+    <div class="summary-card centered">
+        <h2>Purchased Items</h2>
+        {% for row in order.cart["items"] %}<div><span>{{ row.product.short_name }} x {{ row.qty }}</span><strong>Rs. {{ row.line_total }}</strong></div>{% endfor %}
+        <div class="summary-total"><span>Total Paid</span><strong>Rs. {{ order.cart.total }}</strong></div>
+    </div>
+    {% endif %}
+    <a class="button large" href="/">Back to Home</a>
+</section>
+{% endblock %}
+

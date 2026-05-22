@@ -1,0 +1,14 @@
+{% extends "base.html" %}
+{% block title %}Register | Parts360{% endblock %}
+{% block content %}
+<section class="auth-wrap">
+    <form class="auth-card" method="POST">
+        <h1>Create Account</h1>
+        {% if error %}<p class="error">{{ error }}</p>{% endif %}
+        <label>Username<input name="username" required></label>
+        <label>Password<input name="password" type="password" required></label>
+        <button type="submit">Register</button>
+        <a href="/login">Already have an accountRs. </a>
+    </form>
+</section>
+{% endblock %}
